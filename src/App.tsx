@@ -8,7 +8,9 @@ import MaintenanceAlerts from './pages/MaintenanceAlerts';
 import SmartGrid from './pages/SmartGrid';
 import ChargingStations from './pages/ChargingStations';
 import FuelSelection from './pages/FuelSelection';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import { AuthProvider } from './context/AuthContext';
+import { AdminRoute } from './components/admin/AdminRoute';
 
 function App() {
   return (
@@ -23,6 +25,13 @@ function App() {
           <Route path="/smart-grid" element={<SmartGrid />} />
           <Route path="/charging-stations" element={<ChargingStations />} />
           <Route path="/fuel-selection" element={<FuelSelection />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          } />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

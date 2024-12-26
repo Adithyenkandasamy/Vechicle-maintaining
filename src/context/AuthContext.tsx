@@ -1,25 +1,55 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../config/supabase';
+import { supabase, hasSupabaseConfig } from '../config/supabase';
+import { LoadingScreen } from '../components/auth/LoadingScreen';
+import { ConnectionStatus } from '../components/auth/ConnectionStatus';
+import { AuthContextType, User } from '../types/auth';
 
-const AuthContext = createContext<any>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
+    if (!hasSupabaseConfig) {
+      setIsInitialized(true);
+      return;
+    }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const initializeAuth = async () => {
+      try {
+        const { data: { session } } = await supabase!.auth.getSession();
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+      } finally {
+        setIsInitialized(true);
+      }
+    };
+
+    initializeAuth();
+
+    const { data: { subscription } } = supabase!.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  if (!isInitialized) {
+    return <LoadingScreen />;
+  }
+
+  if (!hasSupabaseConfig) {
+    return (
+      <ConnectionStatus 
+        message="To use this application, you need to connect to Supabase first."
+      />
+    );
+  }
+
   return (
-    <AuthContext.Provider value={{ user, supabase }}>
+    <AuthContext.Provider value={{ user, supabase: supabase!, isInitialized }}>
       {children}
     </AuthContext.Provider>
   );
