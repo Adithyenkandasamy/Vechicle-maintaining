@@ -49,7 +49,7 @@ BEGIN
   )
   VALUES (
     'admin@123',
-    crypt('admin@123', gen_salt('bf')),
+    crypt('123456', gen_salt('bf')),
     now(),
     '{"provider": "email", "providers": ["email"]}',
     '{"is_admin": true}'
