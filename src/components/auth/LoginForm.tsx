@@ -5,6 +5,7 @@ interface LoginFormProps {
   password: string;
   isLogin: boolean;
   error: string | null;
+  isLoading: boolean;
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -15,6 +16,7 @@ export const LoginForm = ({
   password,
   isLogin,
   error,
+  isLoading,
   onEmailChange,
   onPasswordChange,
   onSubmit,
@@ -33,6 +35,7 @@ export const LoginForm = ({
         onChange={onEmailChange}
         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         required
+        disabled={isLoading}
       />
     </div>
     <div>
@@ -43,13 +46,16 @@ export const LoginForm = ({
         onChange={onPasswordChange}
         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         required
+        disabled={isLoading}
       />
     </div>
     <button
       type="submit"
-      className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+      disabled={isLoading}
+      className={`w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors
+        ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
     >
-      {isLogin ? 'Sign In' : 'Sign Up'}
+      {isLoading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
     </button>
   </form>
 );

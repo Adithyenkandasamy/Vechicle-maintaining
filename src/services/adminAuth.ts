@@ -1,6 +1,6 @@
 import { supabase } from '../config/supabase';
 
-export const isAdminEmail = (email: string) => email === 'admin@123';
+export const isAdminEmail = (email: string) => email.toLowerCase() === 'admin@123';
 
 export const checkAdminStatus = async (userId: string) => {
   const { data, error } = await supabase

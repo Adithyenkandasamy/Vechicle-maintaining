@@ -11,27 +11,28 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
-  // Redirect admin users to admin dashboard, others to regular dashboard
   useAuthRedirect(user, isAdminEmail(email) ? '/admin' : '/dashboard');
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
     
     try {
-      if (isLogin) {
-        await signIn(email, password);
-      } else {
-        if (isAdminEmail(email)) {
-          setError('Cannot create new admin accounts');
-          return;
-        }
-        await signUp(email, password);
+      const { error: authError } = isLogin 
+        ? await signIn(email, password)
+        : await signUp(email, password);
+
+      if (authError) {
+        setError(authError);
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,6 +50,7 @@ export default function Login() {
           password={password}
           isLogin={isLogin}
           error={error}
+          isLoading={isLoading}
           onEmailChange={(e) => setEmail(e.target.value)}
           onPasswordChange={(e) => setPassword(e.target.value)}
           onSubmit={handleAuth}
@@ -57,8 +59,12 @@ export default function Login() {
           <p className="mt-4 text-center text-sm text-gray-600">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setError(null);
+              }}
               className="text-blue-600 hover:text-blue-800"
+              disabled={isLoading}
             >
               {isLogin ? 'Sign Up' : 'Sign In'}
             </button>
