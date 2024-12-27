@@ -9,6 +9,7 @@ import MaintenanceAlerts from './pages/MaintenanceAlerts';
 import SmartGrid from './pages/SmartGrid';
 import ChargingStations from './pages/ChargingStations';
 import FuelSelection from './pages/FuelSelection';
+import Radar from './pages/radar/page';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import { AuthProvider } from './context/AuthContext';
 import { AdminLayout } from './components/admin/AdminLayout';
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/smart-grid" element={<SmartGrid />} />
           <Route path="/charging-stations" element={<ChargingStations />} />
           <Route path="/fuel-selection" element={<FuelSelection />} />
+          <Route path="/radar" element={<Radar />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>

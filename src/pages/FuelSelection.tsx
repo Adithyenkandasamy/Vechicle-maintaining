@@ -1,24 +1,20 @@
-"use client"
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Fuel, Leaf, DollarSign, Radar } from 'lucide-react';
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { ArrowLeft, Fuel, Leaf, DollarSign, Radar } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-
-export default function Page() {
-  const router = useRouter()
+export default function FuelSelection() {
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-pink-600">
       <div className="p-4">
-        <Button
-          onClick={() => router.back()}
-          variant="ghost"
-          className="text-white"
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="text-white flex items-center"
         >
           <ArrowLeft className="w-6 h-6 mr-2" />
           Back
-        </Button>
+        </button>
       </div>
       
       <div className="max-w-md mx-auto px-4 py-8">
@@ -75,14 +71,14 @@ export default function Page() {
           </div>
         </div>
 
-        <Button asChild className="w-full">
-          <Link href="/radar">
-            <Radar className="w-6 h-6 mr-2" />
-            Go to Radar
-          </Link>
-        </Button>
+        <button
+          onClick={() => navigate('/radar')}
+          className="w-full bg-white text-pink-600 py-3 px-4 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+        >
+          <Radar className="w-6 h-6 mr-2" />
+          Go to Radar
+        </button>
       </div>
     </div>
-  )
+  );
 }
-

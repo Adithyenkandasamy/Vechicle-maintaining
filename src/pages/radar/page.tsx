@@ -1,61 +1,59 @@
-"use client"
-
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const messages = [
   "Found the nearby power station",
   "Found the nearby fuel station",
   "Found the nearby gas station"
-]
+];
 
 interface Point {
-  id: number
-  angle: number
-  distance: number
+  id: number;
+  angle: number;
+  distance: number;
 }
 
-export default function Page() {
-  const [currentMessage, setCurrentMessage] = useState(0)
-  const [points, setPoints] = useState<Point[]>([])
+export default function Radar() {
+  const navigate = useNavigate();
+  const [currentMessage, setCurrentMessage] = useState(0);
+  const [points, setPoints] = useState<Point[]>([]);
 
   useEffect(() => {
     const messageInterval = setInterval(() => {
-      setCurrentMessage((prev) => (prev + 1) % messages.length)
-    }, 3000) // Change message every 3 seconds
+      setCurrentMessage((prev) => (prev + 1) % messages.length);
+    }, 3000);
 
     const pointInterval = setInterval(() => {
       const newPoint: Point = {
         id: Date.now(),
         angle: Math.random() * 360,
-        distance: Math.random() * 0.8 + 0.1, // Between 10% and 90% of the radius
-      }
-      setPoints(prevPoints => [...prevPoints, newPoint])
+        distance: Math.random() * 0.8 + 0.1,
+      };
+      setPoints(prevPoints => [...prevPoints, newPoint]);
 
-      // Remove the point after 2 seconds
       setTimeout(() => {
-        setPoints(prevPoints => prevPoints.filter(p => p.id !== newPoint.id))
-      }, 2000)
-    }, 1000) // Add a new point every second
+        setPoints(prevPoints => prevPoints.filter(p => p.id !== newPoint.id));
+      }, 2000);
+    }, 1000);
 
     return () => {
-      clearInterval(messageInterval)
-      clearInterval(pointInterval)
-    }
-  }, [])
+      clearInterval(messageInterval);
+      clearInterval(pointInterval);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-gray-800">
       <div className="p-4">
-        <Button asChild variant="ghost">
-          <Link href="/fuel-selection">
-            <ArrowLeft className="w-6 h-6 mr-2" />
-            Back to Fuel Selection
-          </Link>
-        </Button>
+        <button
+          onClick={() => navigate('/fuel-selection')}
+          className="text-gray-600 hover:text-gray-800 flex items-center"
+        >
+          <ArrowLeft className="w-6 h-6 mr-2" />
+          Back to Fuel Selection
+        </button>
       </div>
       <div className="flex flex-col items-center justify-center p-4">
         <div className="relative w-64 h-64 md:w-96 md:h-96">
@@ -108,6 +106,5 @@ export default function Page() {
         </AnimatePresence>
       </div>
     </div>
-  )
+  );
 }
-

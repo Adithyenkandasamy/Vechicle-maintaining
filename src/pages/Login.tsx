@@ -55,19 +55,22 @@ export default function Login() {
           onPasswordChange={(e) => setPassword(e.target.value)}
           onSubmit={handleAuth}
         />
-        {!isAdminEmail(email) && (
-          <p className="mt-4 text-center text-sm text-gray-600">
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
-            <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError(null);
-              }}
-              className="text-blue-600 hover:text-blue-800"
-              disabled={isLoading}
-            >
-              {isLogin ? 'Sign Up' : 'Sign In'}
-            </button>
+        <p className="mt-4 text-center text-sm text-gray-600">
+          {isLogin ? "Don't have an account? " : "Already have an account? "}
+          <button
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setError(null);
+            }}
+            className="text-blue-600 hover:text-blue-800"
+            disabled={isLoading}
+          >
+            {isLogin ? 'Sign Up' : 'Sign In'}
+          </button>
+        </p>
+        {!isLogin && (
+          <p className="mt-2 text-center text-xs text-gray-500">
+            Use admin@123 as email for admin access
           </p>
         )}
       </div>
